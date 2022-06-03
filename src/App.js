@@ -41,13 +41,16 @@ function App() {
       {data
         .filter((val, idx) => idx < 10)
         .filter((val) => {
-          const nama = val[1];
+          const nama = val[0];
           const nimFakultas = val[1];
           const nimJurusan = val[2];
 
-          const plainQuery = new RegExp(query);
+          const plainQueryAsPattern = new RegExp(query);
           const searchMethod = 0;
           const byNim = new RegExp(/\d{1,8}/);
+          const byName = new RegExp(/[a-zA-Z]/);
+          const byNimName = new RegExp(/\d{1,8}(\s?[a-zA-Z]*)*/);
+          // const byNameNim = new RegExp(/\d{1,8}[a-zA-Z]/);
           // const byJurusanMatch = () => {
           //   const kodeJurusan = getKodeJurusan(query);
 
@@ -55,10 +58,32 @@ function App() {
 
           if (byNim.test(query)) {
             // jika query berupa nim
-            if (plainQuery.test(nimFakultas) || plainQuery.test(nimJurusan)) {
+            if (plainQueryAsPattern.test(nimFakultas) || plainQueryAsPattern.test(nimJurusan)) {
               // kembalikan data yang memiliki nim yang sama dengan query
+              console.log("byNim");
               return val;
             }
+          }
+          if (byName.test(query)) {
+            // jika query berupa nama
+            if (plainQueryAsPattern.test(nama.toLowerCase())) {
+              // kembalikan data yang memiliki nama yang sama dengan query
+              console.log("byName");
+              return val;
+            }
+          }
+          if (byNimName.test(query)) {
+            const splittedQuery = query.split(" ");
+            const nimPattern = new RegExp(splittedQuery[0]);
+            const namePattern = new RegExp(splittedQuery.slice(1).join(" "));
+
+            if ((nimPattern.test(nimFakultas) || nimPattern.test(nimJurusan)) && namePattern.test(nama.toLowerCase())) {
+              console.log("byNimName");
+              return val;
+            }
+            // if (byNim.test(query) && byName.test(query)) {
+
+            // }
           }
 
 
