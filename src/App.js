@@ -9,30 +9,23 @@ import { useEffect, useState } from "react";
 const data = require("./json/data_13_21.json");
 const kodeJurusan = require('./json/kode_jurusan.json');
 
-const getKodeJurusan = (nim) => {
+const getKodeJurusan = (namaJurusan) => {
+  // mengembalikan kode jurusan dari nama jurusan
+  for (const [key, value] of Object.entries(kodeJurusan)) {
+    if (key.toLowerCase() === namaJurusan.toLowerCase()) {
+      return value;
+    }
+  }
 }
 
 
 // /////////////////////////////////////////////////
 function App() {
   const [query, setQuery] = useState("");
-  // const [result, setResult] = useState([]);
-
-  // useEffect(() => {
-  //   if (query.length > 0) {
-  //     setResult(filtered);
-  //   } else {
-  //     setResult([]);
-  //   }
-  // }, [query]);
-
-  
 
   const searchQueryHandler = (event) => {
     setQuery(event.target.value);
     console.log(query)
-    // const byNimMatch = new RegExp(query)
-    // setResult(data.match(byNimMatch));
   };
 
   return (
@@ -48,16 +41,28 @@ function App() {
       {data
         .filter((val, idx) => idx < 10)
         .filter((val) => {
-          const byNimMatch = new RegExp(query);
-          const byJurusanMatch = {
-            
-          }
-
+          const nama = val[1];
           const nimFakultas = val[1];
           const nimJurusan = val[2];
-          if (byNimMatch.test(nimFakultas) || byNimMatch.test(nimJurusan)) {
-            return val;
+
+          const plainQuery = new RegExp(query);
+          const searchMethod = 0;
+          const byNim = new RegExp(/\d{1,8}/);
+          // const byJurusanMatch = () => {
+          //   const kodeJurusan = getKodeJurusan(query);
+
+          // }
+
+          if (byNim.test(query)) {
+            // jika query berupa nim
+            if (plainQuery.test(nimFakultas) || plainQuery.test(nimJurusan)) {
+              // kembalikan data yang memiliki nim yang sama dengan query
+              return val;
+            }
           }
+
+
+
 
         })
         .map((val, key) => {
