@@ -9,6 +9,26 @@ import { useEffect, useState } from "react";
 const data = require("./json/data_13_21.json");
 const kodeJurusan = require('./json/kode_jurusan.json');
 const kodeFakultas = require('./json/kode_fakultas.json');
+const listJurusan = require('./json/list_jurusan.json');
+const listFakultas = require('./json/list_fakultas.json');
+
+const getJurusan = (kodeJurusan) => {
+  // mengembalikan nama jurusan dari kode jurusan
+  for (const [key, value] of Object.entries(listJurusan)) {
+    if (key === kodeJurusan) {
+      return value;
+    }
+  }
+}
+
+const getFakultas = (kodeFakultas) => {
+  // mengembalikan nama fakultas dari kode fakultas
+  for (const [key, value] of Object.entries(listFakultas)) {
+    if (key === kodeFakultas) {
+      return value;
+    }
+  }
+}
 
 const getKodeJurusan = (namaJurusan) => {
   // mengembalikan kode jurusan dari nama jurusan
@@ -30,8 +50,6 @@ const getKodeFakultas = (namaFakultas) => {
   return -1;
 }
 
-
-// /////////////////////////////////////////////////
 function App() {
   const [query, setQuery] = useState("");
 
@@ -51,32 +69,25 @@ function App() {
         onChange={(event) => searchQueryHandler(event)}
       />
       {data
-        .filter((val, idx) => idx < 10)
         .filter((val) => {
           const nama = val[0];
           const nimFakultas = val[1];
-          const nimJurusan = val[2];
+
+          let nimJurusan = 9999;
+          if (val.length === 3) {
+            nimJurusan = val[2];
+          }
 
           const plainQueryAsPattern = new RegExp(query);
           const searchMethod = 0;
-          const byNim = new RegExp(/\d{1,8}/);
-          const byName = new RegExp(/[a-zA-Z]/);
+          
+          const byNim = new RegExp(/\d{3,8}/);
+          const byName = new RegExp(/([a-zA-Z]{3,}\s?)+/);
 
-          const byNimName = new RegExp(/\d{1,8}(\s?[a-zA-Z]*)*/);
-          const byNameNim = new RegExp(/([a-zA-Z]*\s?)*\d{1,8}/);
+          const byNimName = new RegExp(/\d{3,8}\s([a-zA-Z]{3,}\s?)+/);
+          const byNameNim = new RegExp(/([a-zA-Z]{3,}\s?)+\d{3,8}/);
 
-          const byJurusanFakultas = new RegExp(/[a-zA-Z]{2,4}/);
-
-          // byNameJurusan   bagus ti
-          // byJurusanName   ti bagus
-
-          const byNameJurusan = new RegExp(/([a-zA-Z]*\s?)*[a-zA-Z]{2,4}/);
-          // const byJurusanName = new RegExp
-
-          // const byNimNameJurusan = new RegExp(/\d{1,8}(\s?[a-zA-Z]*)*/);
-          // const byNameNimJurusan = new RegExp(/([a-zA-Z]*\s?)*\d{1,8}\s[a-zA-Z]{2,4}/);
-          // const byJurusanNimName = new RegExp(/[a-zA-Z]{2,4}\s\d{1,8}(\s?[a-zA-Z]*)*/)
-          // const byJurusanNameNim = new RegExp(/[a-zA-Z]{2,4}\s([a-zA-Z]*\s?)*\d{1,8}/)
+          const byMajorname = new RegExp(/([a-zA-Z]{2,}\s?)+/);
 
           if (byNim.test(query)) {
             // query nim
@@ -93,7 +104,6 @@ function App() {
               return val;
             }
           }
-
           if (byNimName.test(query)) {
             // query <nim> <nama>
             const splittedQuery = query.split(" ");
@@ -117,44 +127,45 @@ function App() {
             }
           }
 
-          if (byJurusanFakultas.test(query)) {
-            // query <fakultas> or <jurusan>
-            if (getKodeJurusan(query) !== -1 || getKodeFakultas(query) !== -1) {
-              const nimPattern1 = new RegExp(getKodeJurusan(query));
-              const nimPattern2 = new RegExp(getKodeFakultas(query));
-              // console.log(getKodeJurusan(query));
-              if ((nimPattern2.test(nimFakultas) || nimPattern1.test(nimJurusan))) {
-                console.log("masuk jurusan fakultas")
+          // TODO: bikin input jurusan ex. informatika matematika dari list_fakultas.json and list_jurusan.json
+          // TODO: pake mongodb biar bisa limit result
+
+          if (byMajorname.test(query)) {
+            // input jurusan. ex: IF MA
+            const splittedQuery = query.split(" ");
+            const majorQuery = splittedQuery[splittedQuery.length - 1];
+            const namePattern = new RegExp(splittedQuery.slice(0, -1).join(" "));
+
+            if (getKodeFakultas(majorQuery) !== -1 || getKodeJurusan(majorQuery) !== -1) {
+              const nimPattern1 = new RegExp(getKodeJurusan(majorQuery));
+              const nimPattern2 = new RegExp(getKodeFakultas(majorQuery));
+              if (namePattern.test(nama.toLowerCase()) && nimPattern2.test(nimFakultas) || nimPattern1.test(nimJurusan)) {
+                console.log("byMajorName");
                 return val;
               }
             }
+
           }
-
-          if(byNimNameJurusan.test(query)) {
-            const splittedQuery = query.split(" ");
-            const nim = new RegExp(splittedQuery[0]);
-
-            const kodeJurusanFakultas = splittedQuery[splittedQuery.length-1];
-            const jurusanPattern = new RegExp(getKodeJurusan(kodeJurusanFakultas));
-            const fakultasPattern = new RegExp(getKodeFakultas(kodeJurusanFakultas));
-
-            const namaPattern = new RegExp(splittedQuery.slice(1,-1).join(" "));
-
-            if ((nim.test(nimFakultas) || nim.test(nimJurusan)) && namaPattern.test(nama.toLowerCase()) && (fakultasPattern.test(nimFakultas) || jurusanPattern.test(nimJurusan))) {
-
-            }
-          }
-
-
-
-
 
         })
+        .filter((val, idx) => idx < 10)
         .map((val, key) => {
           return (
             <div key={key}>
               <p>
-                {val[0]} {val[1]} {val[2]}
+                {val[0]} 
+                {" "}
+                {val[1]} 
+                {" "}
+                { 
+                  (val.length === 3) &&
+                  val[2]
+                } 
+                {" "}
+                {
+                  (val.length === 3) ? getJurusan(val[2].toString().slice(0,3)) : getFakultas(val[1].toString().slice(0,3)) 
+
+                }
               </p>
             </div>
           );
