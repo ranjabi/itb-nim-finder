@@ -1,38 +1,79 @@
-.App {
+* {
+  border-style: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* .main {
+  background-color: aliceblue;
+} */
+
+h1 {
+  font-family: 'Courier New', Courier, monospace;
+  margin: 2rem 1rem;
+  font-size: 36px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.query {
+  margin: 1rem 2rem 1rem 8rem;
+  
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.query input {
+  width: 80%;
+  font-size: 20px;
+  border-radius: 20px;
+  padding: 0.8rem;
+  margin-bottom: 1.5rem;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.query button {
+  border-radius: 20px;
+  background-color: #1081e8;
+  padding: 0.9rem 2rem;
+  font-size: 20px;
+  border: none;
+  margin: 0rem 1rem;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.query button:hover {
+  opacity: 80%;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.result {
+  border-bottom: 1px solid rgb(219, 219, 219);
+  width: 70%;
+  margin: auto;
+}
+
+.result p {
+  font-size: 25px;
+  padding: 5px;
+}
+
+.nim {
+  color: #1081e8;
+}
+
+.jurusan {
+  float: right;
+}
+
+.how {
+  margin: 3rem 0rem;
+  text-align: center;
+  color: #1081e8;
+  font-size: 22px;
+  font-family: 'Courier New', Courier, monospace;
+  font-weight: 600;
+}
+
+.about {
+  text-align: center;
+  font-family: 'Courier New', Courier, monospace;
+  color:rgb(234, 0, 255);
+  font-weight: 600;
+  margin-bottom: 4rem;
 }
