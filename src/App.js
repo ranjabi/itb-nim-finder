@@ -371,7 +371,7 @@ function App() {
   };
 
   return (
-    <div className="bg-slate-400 py-20 h-screen">
+    <div className="bg-slate-400 py-20 min-h-screen">
       <div className="container w-8/12 mx-auto bg-white rounded-xl p-8 text-center">
         <h1 className="text-3xl p-8">Find Someone!</h1>
         <div className="">
