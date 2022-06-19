@@ -372,7 +372,7 @@ function App() {
 
   return (
     <div className="bg-slate-400 py-20 min-h-screen">
-      <div className="container w-8/12 mx-auto bg-white rounded-xl p-8 text-center">
+      <div className="container w-6/12 mx-auto bg-white rounded-xl p-8 text-center">
         <h1 className="text-3xl p-8">Find Someone!</h1>
         <div className="">
           <div className="flex justify-between py-2 px-4 mb-6 rounded-lg border border-slate-300">
